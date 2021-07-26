@@ -3,34 +3,35 @@ package cn.lambdalib2;
 import cn.lambdalib2.multiblock.MsgBlockMulti;
 import cn.lambdalib2.registry.RegistryMod;
 import cn.lambdalib2.registry.impl.RegistryManager;
-import cn.lambdalib2.registry.impl.RegistryTransformer;
 import cn.lambdalib2.s11n.network.NetworkEvent;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.util.DebugDraw;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.event.*;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.fml.network.simple.SimpleChannel;
 import org.apache.logging.log4j.Logger;
 
 @RegistryMod(resourceDomain = "lambdalib2")
-@Mod(modid = LambdaLib2.MODID, version = LambdaLib2.VERSION)
-public class LambdaLib2
-{
+@Mod("{modId: " + LambdaLib2.MODID + ", version: " + LambdaLib2.VERSION + "}")
+public class LambdaLib2 {
     public static final String MODID = "lambdalib2";
     public static final String VERSION = "@LAMBDA_LIB_VERSION@";
+    private static final String PROTOCOL_VERSION = "1.16.5";
 
     /**
      * Whether we are in development (debug) mode.
      */
     public static final boolean DEBUG = VERSION.startsWith("@");
 
-    public static final SimpleNetworkWrapper channel = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
+    public static final SimpleChannel channel = NetworkRegistry.newSimpleChannel(
+            new ResourceLocation(MODID, "main"),
+            () -> PROTOCOL_VERSION,
+            PROTOCOL_VERSION::equals,
+            PROTOCOL_VERSION::equals
+    );;
     public static Configuration config;
 
     private static Logger log;
@@ -39,7 +40,7 @@ public class LambdaLib2
         return log;
     }
 
-    @EventHandler
+    @SubscribeEvent
     public void preInit(FMLPreInitializationEvent event) {
         log = event.getModLog();
         config = new Configuration(event.getSuggestedConfigurationFile());

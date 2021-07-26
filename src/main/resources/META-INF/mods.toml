@@ -1,0 +1,14 @@
+modLoader="javafml"
+loaderVersion="[36,)"
+license="MIT"
+issueTrackerURL="github.com/misaka19465/LambdaLib2/issues"
+showAsResourcePack=false
+[[mods]]
+  modId="lambdalib2"
+  version="${version}"
+  displayName="LambdaLib 2"
+  displayURL="github.com/misaka19465/LambdaLib2"
+  authors="Lambda Innovation, Misaka19465"
+  description='''
+  A Minecraft modding library that facilitates content development with useful middle layers.
+  '''
